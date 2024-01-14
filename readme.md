@@ -6,7 +6,8 @@
 
 # Workflow
 - set up rstp link and getting frames per second loop [ref](#setting-up-camera-feed-loop)
-- install redis in docker 
+- install redis in docker and test connection [ref](#set-up-redis)
+- write frame data to redis and retrieve-remove (current)
 
 
 # Refs
@@ -42,3 +43,8 @@ camera_links = ["rtsp://admin:aci54321@192.168.12.53:554/cam/realmonitor?channel
 
 save_frame_loop(camera_links[0], 0)
 ```
+
+## Set up Redis
+> For changes, see commit '1c31883: added redis'
+
+We have redis in a docker container. It has a volume associated with it to store the frames. The config variable allows us to namespace different services, and also for future expansion in the env section. Other than that, i have enabled snapshots every 60 seconds for persistance. 
