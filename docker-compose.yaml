@@ -1,0 +1,16 @@
+version: '3.8'
+# env_file: # available in docker-compose 2.24 
+#     path: ./config.env
+#     required: true 
+services:
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning # --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - frame-cache:/data
+volumes:
+  frame-cache:
+    driver: local
