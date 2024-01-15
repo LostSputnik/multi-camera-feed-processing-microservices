@@ -1,7 +1,7 @@
 import cv2
 import time
 
-from utils import store_frame_to_redis
+from utils import store_frame_to_redis, send_key_to_queue
 
 def frame_store_loop_single_camera(rtsp_link, camera_id, redis_client):
     # init last time
@@ -34,8 +34,9 @@ def frame_store_loop_single_camera(rtsp_link, camera_id, redis_client):
                 # cv2.imwrite(key+'.jpg', frame)
 
                 # Send key reference to RabbitMQ for detection service
-                # send_to_detection_queue(frame_reference, timestamp)
+                send_key_to_queue('localhost', 'frame_queue', key)
 
+                # update timestamp
                 last_time = time_string
 
 

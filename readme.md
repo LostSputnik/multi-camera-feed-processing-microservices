@@ -90,6 +90,13 @@ volumes:
 I am using the management tag as it comes with the web UI and the alpine image since it is lightweight and sufficient for what we need. 
 Next, we run our killswitch to up the containers.
 
+### Connecting to rabbitMQ and publish keys
+We connect using Pika, a RabbitMQ client for python
+
+```
+pip install pika
+```
+
 
 # Links Dump
 
