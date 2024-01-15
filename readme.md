@@ -52,3 +52,7 @@ We have redis in a docker container. It has a volume associated with it to store
 
 ### Store and Retrieve from Redis
 The commits are there for the changes.  Mainly, the frame-store service encodes the frame into a string, and the key has metadata info for the frames. since the metedata is already in the key, we just need to store the frame. the frame-process service retrives this frame from the redis volume and decodes it.
+
+# Links Dump
+
+- [Using Redis with docker and docker-compose for local development a step-by-step tutorial](https://geshan.com.np/blog/2022/01/redis-docker/)
