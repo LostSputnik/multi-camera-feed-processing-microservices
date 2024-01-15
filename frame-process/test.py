@@ -9,4 +9,4 @@ key = 'frame:pharma-ng:0:01_14_2024-17_45_00'
 
 frame = retrieve_frame_from_redis(r, key)
 
-cv2.imwrite(key+'.jpg', frame)
+# cv2.imwrite(key+'.jpg', frame)

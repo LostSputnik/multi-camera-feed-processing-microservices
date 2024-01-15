@@ -1,9 +1,8 @@
-import json
 import cv2
 import numpy as np
 import base64
 
-def serialize_frame_opencv(frame):
+def encode_frame_to_string(frame):
     # Compress the frame using imencode. '.jpg' specifies the compression algorithm
     ret, buffer = cv2.imencode('.jpg', frame)
     if ret:
@@ -15,19 +14,9 @@ def serialize_frame(frame):
 
 def store_frame_to_redis(redis_client, factory_name, camera_id, timestamp, frame):
     key = f"frame:{factory_name}:{camera_id}:{timestamp}"
-    serialized_frame = serialize_frame_opencv(frame)
+    frame_string = encode_frame_to_string(frame)
 
-    data = {
-        "factory_name": factory_name,
-        "camera_id": camera_id,
-        "timestamp": timestamp,
-        "frame": serialized_frame
-    }
-
-    serialized_data = json.dumps(data)
-
-    # Store data in a hash
-    redis_client.set(key, serialized_data)
+    redis_client.set(key, frame_string)
 
     return key
 
