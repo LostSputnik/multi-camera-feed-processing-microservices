@@ -1,5 +1,5 @@
 version: '3.8'
-# env_file: # available in docker-compose 2.24 
+# env_file: # available in docker-compose 2.24, currently setting config.env from cmd prompt
 #     path: ./config.env
 #     required: true 
 services:
@@ -11,6 +11,19 @@ services:
     command: redis-server --save 60 1 --loglevel warning # --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
     volumes: 
       - frame-cache:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - '5672:5672'  # AMQP protocol port
+      - '15672:15672'  # Management UI port
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+
 volumes:
   frame-cache:
+    driver: local
+  rabbitmq-data:
     driver: local

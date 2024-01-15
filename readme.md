@@ -10,6 +10,16 @@
 - write frame data to redis and retrieve-remove [ref](#store-and-retrieve-from-redis)
 - send key to RabbitMQ message-queue (current)
 
+# To Dos
+- [ ] Memory cap & management for redis
+- [ ] Memory cap & management for rabbitMQ
+- [ ] Update redis and rabbitMQ connection string hosts (currently set as localhost, which works, but we want it to be able to properly connect to the redis/rmq service)
+
+
+# KillSwitch
+```
+docker compose --env-file ./config.env up -d
+```
 
 # Refs
 
@@ -53,6 +63,36 @@ We have redis in a docker container. It has a volume associated with it to store
 ### Store and Retrieve from Redis
 The commits are there for the changes.  Mainly, the frame-store service encodes the frame into a string, and the key has metadata info for the frames. since the metedata is already in the key, we just need to store the frame. the frame-process service retrives this frame from the redis volume and decodes it.
 
+
+## Setting up RabbitMQ
+
+### Adding RabbitMQ to system
+
+1. First, lets set up our docker container. Going to use compose for this.
+
+```
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - '5672:5672'  # AMQP protocol port
+      - '15672:15672'  # Management UI port
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq-data:
+    driver: local
+```
+
+
+I am using the management tag as it comes with the web UI and the alpine image since it is lightweight and sufficient for what we need. 
+Next, we run our killswitch to up the containers.
+
+
 # Links Dump
 
 - [Using Redis with docker and docker-compose for local development a step-by-step tutorial](https://geshan.com.np/blog/2022/01/redis-docker/)
+- [HOW TO SET UP RABBITMQ WITH DOCKER COMPOSE](https://x-team.com/blog/set-up-rabbitmq-with-docker-compose/)
+- [RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
