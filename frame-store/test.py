@@ -29,16 +29,16 @@ def frame_store_loop_single_camera(rtsp_link, camera_id, redis_client):
                     frame=frame
                     )
 
-                # # for debug
-                # print(key)
-                # cv2.imwrite(key+'.jpg', frame)
-
                 # Send key reference to RabbitMQ for detection service
                 send_key_to_queue('localhost', 'frame_queue', key)
 
                 # update timestamp
                 last_time = time_string
 
+
+                # # for debug
+                print(f'Sent: ', key)
+                # cv2.imwrite(key+'.jpg', frame)
 
 camera_links = ["rtsp://admin:aci54321@192.168.12.53:554/cam/realmonitor?channel=2&subtype=0"]
 

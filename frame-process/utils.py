@@ -2,6 +2,7 @@ import cv2
 import base64
 import numpy as np
 
+# redis stuff
 
 def delete_frame_from_redis(redis_client, key):
     redis_client.delete(key)
@@ -14,8 +15,6 @@ def decode_string_to_frame(serialized_frame):
 
 def retrieve_frame_from_redis(redis_client, key):
     frame_string = redis_client.getdel(key)
-    # data = json.loads(serialized_data)
-    # print(data)
     if frame_string:
         frame = decode_string_to_frame(frame_string)
         return frame

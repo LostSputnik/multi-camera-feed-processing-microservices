@@ -4,15 +4,14 @@ import base64
 
 import pika
 
+# redis stuff
+
 def encode_frame_to_string(frame):
     # Compress the frame using imencode. '.jpg' specifies the compression algorithm
     ret, buffer = cv2.imencode('.jpg', frame)
     if ret:
         return base64.b64encode(buffer).decode('utf-8')
     return None
-
-def serialize_frame(frame):
-    return np.array(frame).tobytes()
 
 def store_frame_to_redis(redis_client, factory_name, camera_id, timestamp, frame):
     key = f"frame:{factory_name}:{camera_id}:{timestamp}"
@@ -24,6 +23,8 @@ def store_frame_to_redis(redis_client, factory_name, camera_id, timestamp, frame
 
     # Set a TTL for the hash (e.g., 60 seconds)
     # redis_client.expire(key, 60)
+
+# rabbitmq stuff 
 
 def send_key_to_queue(rabbitmq_host, queue_name, frame_key):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
