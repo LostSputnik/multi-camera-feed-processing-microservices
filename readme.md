@@ -10,7 +10,7 @@
 - write frame data to redis and retrieve-remove [ref](#store-and-retrieve-from-redis)
 - send key to RabbitMQ message-queue [ref](#connecting-to-rabbitmq-and-publish-keys)
 - consume keys from message queue and read frames [ref](#consuming-messages-on-rabbitmq)
-- scaling with Celery workers (current)
+- Adding person detection on frame-process end (current) [ref](#object-detection-with-yolo-wip)
 
 # To Dos
 - [ ] Memory cap & management for redis
@@ -18,7 +18,7 @@
 - [ ] Update redis and rabbitMQ connection string hosts (currently set as localhost, which works, but we want it to be able to properly connect to the redis/rmq service)
 
 
-# KillSwitch
+# KillSwitch Engage
 ```
 docker compose --env-file ./config.env up -d
 ```
@@ -182,6 +182,9 @@ Some notes on this code:
 - Also, the position of ```channel.basic_qos(prefetch_count=1)``` matters as it must be declared before ```basic_consume``` to be effective.
 
 - Second, on the callback, we are acknowledging the messages. Going back to the scaling topic, I will need to check whether simulanous workers receive same key before ack and such! Scaling is next up! 
+
+## Object Detection with YOLO (WIP)
+Details are in ```frame-process/detection```. Currently using YOLOv4 with OpenCV for ease of use and setup.
 
 # Links Dump
 

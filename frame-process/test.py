@@ -12,10 +12,8 @@ def frame_process_callback(ch, method, properties, body):
     frame = retrieve_frame_from_redis(redis_client, frame_key)
 
     if frame is not None:
-        cv2.imwrite(frame_key+'.jpg', frame)
-        
-        # # not needed as we use getdel when retrieving
-        # delete_frame_from_redis(redis_client, frame_key)
+        # frame processing logic goes here
+        pass
     
     else:
         print('NOT FOUND - ', frame_key)
