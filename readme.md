@@ -1,7 +1,10 @@
+# Welcome!
+This is part of my efforts to build a scalable, distributed, and modular architecture for recording and processing frames across multiple CCTV camera feeds (for end-goals/use cases see [here](./use-cases.md)). The plan is to use Redis for frame caching, RabbitMQ for messaging, and Celery for distributed processing across multiple camera feeds, boosting system efficiency and data handling. 
+
+This is very much a work-in-progress, as I am actively pushing changes and documenting my journey, so you can expect some rough edges. You can check out the [workflow](#workflow) section to see the work done so far and the [refs](#refs) section to read up on the implementation details. Feel free to send PRs or recommendtions.
 
 # Status
-- Got frame saving loop for every second for a single camera feed. Plan to use this as a celery worker to distribute the load across multiple feeds
-- next is redis to dump the frames
+Currently, the frame-store part reads the frames from RTSP streams, dumping them to a Redis cache, and sends the key over RabbitMQ. The frame-process part picks up this key, gets the frame from Redis and is to run a object detection script on the frame, plotting the bounding boxes and finally writing the image to disk.
 
 
 # Workflow
@@ -13,9 +16,12 @@
 - Adding person detection on frame-process end (current) [ref](#object-detection-with-yolo-wip)
 
 # To Dos
+- [ ] Containerize frame-store and frame-process
+- [ ] Use environment variables for factory/store use cases
 - [ ] Memory cap & management for redis
 - [ ] Memory cap & management for rabbitMQ
 - [ ] Update redis and rabbitMQ connection string hosts (currently set as localhost, which works, but we want it to be able to properly connect to the redis/rmq service)
+- [ ] Distributed processing w/ Celery
 
 
 # KillSwitch Engage
@@ -184,7 +190,7 @@ Some notes on this code:
 - Second, on the callback, we are acknowledging the messages. Going back to the scaling topic, I will need to check whether simulanous workers receive same key before ack and such! Scaling is next up! 
 
 ## Object Detection with YOLO (WIP)
-Details are in ```frame-process/detection```. Currently using YOLOv4 with OpenCV for ease of use and setup.
+Details are in ```frame-process/detection``` w/ a provided readme file. Currently using YOLOv4 with OpenCV for ease of use and setup.
 
 # Links Dump
 
