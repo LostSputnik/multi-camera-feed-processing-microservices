@@ -24,6 +24,7 @@ def detect_person_cv2_yolov4(frame):
     class_ids = []
     confidences = []
     boxes = []
+    locations = []
     for out in outs:
         for detection in out:
             scores = detection[5:]
@@ -40,6 +41,11 @@ def detect_person_cv2_yolov4(frame):
                 x = int(center_x - w / 2)
                 y = int(center_y - h / 2)
 
+                # Person co-ordinates for transform
+                leg_x = center_x
+                leg_y = center_y + h/2
+
+                locations.append([leg_x, leg_y])
                 boxes.append([x, y, w, h])
                 confidences.append(float(confidence))
                 class_ids.append(class_id)
@@ -51,7 +57,10 @@ def detect_person_cv2_yolov4(frame):
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
+            leg_x, leg_y = locations[i]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.circle(frame, [int(leg_x),int(leg_y)], radius=6, color=(0, 0, 255), thickness=-1)
+
 
     # Display the resulting frame
     cv2.imshow("Frame", frame)
